@@ -21,6 +21,7 @@ xn::Player gPlayer;
 ImageDrawer *gImageDrawer;
 DepthDrawer *gDepthDrawer;
 SkeletonDrawer *g_skeletonDrawer;
+Drawer *gDrawOrder[2];
 
 void xn_call_and_check(XnStatus status, const char *message)
 {
@@ -37,15 +38,22 @@ void setMainWindow(WindowMode mode)
 {
   switch(mode){
   case DEPTH_WINDOW:
-    gDepthDrawer->setDrawRegion(0, 0, WIN_SIZE_X, WIN_SIZE_Y);
-    gImageDrawer->setDrawRegion(WIN_SIZE_X/15, WIN_SIZE_Y/15, WIN_SIZE_X/3, WIN_SIZE_Y/3);
+    gDrawOrder[0] = gDepthDrawer;
+    gDrawOrder[1] = gImageDrawer;
     winMode = DEPTH_WINDOW;
     break;
   case IMAGE_WINDOW:
-    gDepthDrawer->setDrawRegion(WIN_SIZE_X/15, WIN_SIZE_Y/15, WIN_SIZE_X/3, WIN_SIZE_Y/3);
-    gImageDrawer->setDrawRegion(0, 0, WIN_SIZE_X, WIN_SIZE_Y);
+    gDrawOrder[0] = gImageDrawer;
+    gDrawOrder[1] = gDepthDrawer;
     winMode = IMAGE_WINDOW;
     break;
+  }
+  
+  if(gDrawOrder[0]){
+    gDrawOrder[0]->setDrawRegion(0, 0, WIN_SIZE_X, WIN_SIZE_Y);
+  }
+  if(gDrawOrder[1]){
+    gDrawOrder[1]->setDrawRegion(WIN_SIZE_X/15, WIN_SIZE_Y/15, WIN_SIZE_X/3, WIN_SIZE_Y/3);
   }
 }
 
@@ -58,13 +66,16 @@ void xn_init()
   
   gContext.FindExistingNode(XN_NODE_TYPE_PLAYER, gPlayer);
   gPlayer.SetRepeat(false);
-
+  
+  XnStatus rc = XN_STATUS_OK;
   xn::ImageGenerator image;
-  gContext.FindExistingNode(XN_NODE_TYPE_IMAGE, image);
-  gImageDrawer = new ImageDrawer(image);  
+  rc = gContext.FindExistingNode(XN_NODE_TYPE_IMAGE, image);
+  gImageDrawer = (rc == XN_STATUS_OK)? new ImageDrawer(image) : NULL;
+  
   xn::DepthGenerator depth;
-  gContext.FindExistingNode(XN_NODE_TYPE_DEPTH, depth);
-  gDepthDrawer = new DepthDrawer(depth);
+  rc = gContext.FindExistingNode(XN_NODE_TYPE_DEPTH, depth);
+  gDepthDrawer = (rc == XN_STATUS_OK)? new DepthDrawer(depth) : NULL;
+  
   setMainWindow(IMAGE_WINDOW);
 }
 
@@ -73,17 +84,12 @@ void gl_onDisplay()
   gContext.WaitAndUpdateAll();
   glClear(GL_COLOR_BUFFER_BIT);	
 
-  switch(winMode){
-  case DEPTH_WINDOW: 
-    gDepthDrawer->draw();  
-    gImageDrawer->draw();
-    break;
-  case IMAGE_WINDOW:
-    gImageDrawer->draw();
-    gDepthDrawer->draw();  
-    break;
+  for(int i = 0; i < 2; i++){
+    if(gDrawOrder[i] != NULL){
+      gDrawOrder[i]->draw();
+    }
   }
-
+  
   glutSwapBuffers();
 }
 
