@@ -93,7 +93,6 @@ void gl_onDisplay()
   glutSwapBuffers();
 }
 
-int count = 0;
 void gl_onKeyboard(unsigned char key, int x, int y)
 {
   switch(key){
