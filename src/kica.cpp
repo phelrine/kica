@@ -78,7 +78,7 @@ void XN_CALLBACK_TYPE xn_onLostUser
 
 void xn_init()
 {
-  xn_call_and_check(gContext.InitFromXmlFile("./SamplesConfig.xml"), "init from xml");
+  xn_call_and_check(gContext.InitFromXmlFile("../conf/SamplesConfig.xml"), "init from xml");
   
   xn::ImageGenerator image;
   xn_call_and_check(gContext.FindExistingNode(XN_NODE_TYPE_IMAGE, image), 
