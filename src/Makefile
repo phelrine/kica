@@ -1,6 +1,7 @@
 CXX = g++
 CXXFLAGS = -g
-INCLUDES = -I /usr/include/ni
+OPENNI = -I /usr/include/ni
+INCLUDES = -I ../include $(OPENNI) 
 LDFLAGS = -lOpenNI
 
 OS = $(shell uname)
@@ -35,5 +36,5 @@ depend:
 -include .depend
 
 check-syntax:
-	$(CXX) $(INCLUDES) $(LDFLAGS) -Wall -Wextra -pedantic -fsyntax-only $(CHK_SOURCES)
+	$(CXX) $(INCLUDES) -Wall -Wextra -pedantic -fsyntax-only $(CHK_SOURCES)
 
