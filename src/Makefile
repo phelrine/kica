@@ -16,7 +16,7 @@ SRC = $(OBJ:.o.cpp)
 
 .PHONY: all clean depend check-syntax 
 
-all: kica kivi
+all: kica kivi CSVData.o
 
 kica: $(OBJ) kica.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(INCLUDES) $^ -o $@
