@@ -18,11 +18,10 @@ class Capture
   FILE *out;
   XnUserID user;
   int frame;
-  
 public:
   Capture(xn::Context *context);
   virtual ~Capture() {};
-  
+  bool setFileName(char *name);
   bool start(XnUserID user);
   bool stop();
   void addSkeletonJoint(XnSkeletonJoint joint);
