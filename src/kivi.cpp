@@ -57,7 +57,7 @@ void setMainWindow(WindowMode mode)
   }
 }
 
-void xn_init()
+void xn_init(char *argv)
 {
   char filename[256];
   sprintf(filename, "%s", argv);
