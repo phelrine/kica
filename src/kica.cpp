@@ -76,7 +76,7 @@ void XN_CALLBACK_TYPE xn_onLostUser
   gUserGenerator.GetSkeletonCap().StopTracking(id);
 }
 
-void xn_init()
+void xn_init(char *argv)
 {
   xn_call_and_check(gContext.InitFromXmlFile("../conf/SamplesConfig.xml"), "init from xml");
   
@@ -106,6 +106,8 @@ void xn_init()
   gSkeletonDrawer->setDrawRegion(0, 0, WIN_SIZE_X, WIN_SIZE_Y);
     
   capture  = new Capture(&gContext);
+  capture->setFileName(argv);
+
   XnSkeletonJoint joints[] = {
     XN_SKEL_HEAD, XN_SKEL_NECK, XN_SKEL_TORSO, 
     XN_SKEL_LEFT_SHOULDER, XN_SKEL_LEFT_ELBOW, XN_SKEL_LEFT_HAND,
@@ -211,11 +213,14 @@ void gl_init(int *pargc, char **argv)
 
 int main(int argc, char *argv[])
 {
+  if(argc==2){
   gl_init(&argc, argv);
-  xn_init();
-  
+
+  xn_init(argv[1]);
   gContext.StartGeneratingAll();
   glutMainLoop();
+
+  }
 
   return 0;
 }
