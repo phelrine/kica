@@ -60,7 +60,7 @@ void setMainWindow(WindowMode mode)
 void xn_init()
 {
   char filename[256];
-  sprintf(filename, "%s.oni", "image-0");
+  sprintf(filename, "%s", argv);
   xn_call_and_check(gContext.Init(), "init context");
   xn_call_and_check(gContext.OpenFileRecording(filename), "set global mirror mode.");
   
@@ -131,11 +131,13 @@ void gl_init(int *pargc, char **argv)
 
 int main(int argc, char *argv[])
 {
+  if(argc==2){
   gl_init(&argc, argv);
-  xn_init();
 
+  xn_init(argv[1]);
   glutMainLoop();
 
+  }
   return 0;
 }
 
