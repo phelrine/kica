@@ -1,6 +1,7 @@
 #include "Capture.h"
 
 int Capture::count = 0;
+
 char inputName[256];
 
 Capture::Capture(xn::Context *ctx) 
