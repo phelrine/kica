@@ -214,12 +214,11 @@ void gl_init(int *pargc, char **argv)
 int main(int argc, char *argv[])
 {
   if(argc==2){
-  gl_init(&argc, argv);
+    gl_init(&argc, argv);
 
-  xn_init(argv[1]);
-  gContext.StartGeneratingAll();
-  glutMainLoop();
-
+    xn_init(argv[1]);
+    gContext.StartGeneratingAll();
+    glutMainLoop();
   }
 
   return 0;

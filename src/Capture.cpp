@@ -2,20 +2,16 @@
 
 int Capture::count = 0;
 
-char inputName[256];
-
 Capture::Capture(xn::Context *ctx) 
   : state(CAPTURE_STOP), context(ctx), joints()
 {
 }
 
-bool Capture::setFileName(char *name_)
+void Capture::setFileName(const char *name)
 {
-
-  strcpy(inputName,name_);
-
-  return true;
+  strcpy(filename,name);
 }
+
 bool Capture::start(XnUserID user_)
 {
   if(state == CAPTURE_START)
@@ -23,14 +19,14 @@ bool Capture::start(XnUserID user_)
 
   state = CAPTURE_START;  
   
-  XnChar filename[256];
+  XnChar buf[256];
   recorder = new xn::Recorder;
   recorder->Create(*context);
-  sprintf(filename, "%s-%d.oni", inputName, count);
-  recorder->SetDestination(XN_RECORD_MEDIUM_FILE, filename);
+  sprintf(buf, "%s-%d.oni", filename, count);
+  recorder->SetDestination(XN_RECORD_MEDIUM_FILE, buf);
   
-  sprintf(filename, "%s-%d.csv", inputName, count);
-  out = fopen(filename, "w");
+  sprintf(buf, "%s-%d.csv", filename, count);
+  out = fopen(buf, "w");
   printf("start\n");
   user = user_;
   frame = 0;
